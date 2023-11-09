@@ -6,8 +6,21 @@ export function NavBar() {
 
   return (
     <Flex>
-      <Button onClick={() => navigate("/")}>home</Button>
-      <Button onClick={() => navigate("/writer")}>writer</Button>
+      <Button
+        size={"lg"}
+        colorScheme="orange"
+        mr={"15px"}
+        onClick={() => navigate("/")}
+      >
+        home
+      </Button>
+      <Button
+        size={"lg"}
+        colorScheme="teal"
+        onClick={() => navigate("/writer")}
+      >
+        writer
+      </Button>
     </Flex>
   );
 }

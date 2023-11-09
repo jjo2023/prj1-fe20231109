@@ -29,10 +29,12 @@ export function BoardList() {
 
   return (
     <Box>
+      <br />
       <h1>게시물 목록</h1>
+      <br />
       <Box>
         <Table>
-          <Thead>
+          <Thead bgColor={"pink.200"}>
             <Tr>
               <Th>id</Th>
               <Th>title</Th>
@@ -40,7 +42,7 @@ export function BoardList() {
               <Th>at</Th>
             </Tr>
           </Thead>
-          <Tbody>
+          <Tbody background={"pink"}>
             {boardList.map((board) => (
               <Tr
                 _hover={{ cursor: "pointer" }}

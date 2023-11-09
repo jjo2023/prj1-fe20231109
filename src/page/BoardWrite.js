@@ -55,24 +55,36 @@ export function BoardWrite(props) {
 
   return (
     <Box>
+      <br />
       <h1>게시물 작성</h1>
+      <br />
       <Box>
         <FormControl>
           <FormLabel>제목</FormLabel>
-          <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+          <Input
+            background={"pink.50"}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
         </FormControl>
         <FormControl>
           <FormLabel>본문</FormLabel>
           <Textarea
+            background={"pink.50"}
             value={content}
             onChange={(e) => setContent(e.target.value)}
           ></Textarea>
         </FormControl>
         <FormControl>
           <FormLabel>작성자</FormLabel>
-          <Input value={writer} onChange={(e) => setWriter(e.target.value)} />
+          <Input
+            background={"pink.50"}
+            value={writer}
+            onChange={(e) => setWriter(e.target.value)}
+          />
         </FormControl>
         <Button
+          mt={"30px"}
           isDisabled={isSubmitting}
           onClick={handleSubmit}
           colorScheme="pink"
