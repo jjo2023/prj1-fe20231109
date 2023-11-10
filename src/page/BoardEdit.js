@@ -21,16 +21,36 @@ export function BoardEdit() {
     return <Spinner />;
   }
 
+  function handleTitleChange(e) {
+    updateBoard((dratf) => {
+      dratf.title = e.target.value;
+    });
+  }
+
+  function handleContentChange(e) {
+    updateBoard((dratf) => {
+      dratf.content = e.target.value;
+    });
+  }
+
   return (
     <Box>
       <h1>{id}번 글 수정</h1>
       <FormControl>
         <FormLabel>제목</FormLabel>
-        <Input background={"pink.50"} value={board.title} />
+        <Input
+          background={"pink.50"}
+          value={board.title}
+          onChange={handleTitleChange}
+        />
       </FormControl>
       <FormControl>
         <FormLabel>본문</FormLabel>
-        <Input background={"pink.50"} value={board.content} />
+        <Input
+          background={"pink.50"}
+          value={board.content}
+          onChange={handleContentChange}
+        />
       </FormControl>
       <FormControl>
         <FormLabel>작성자</FormLabel>
