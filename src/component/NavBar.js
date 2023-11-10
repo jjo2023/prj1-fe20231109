@@ -24,6 +24,7 @@ export function NavBar() {
       </Button>
       <Button
         size={"lg"}
+        mr={"15px"}
         colorScheme="green"
         onClick={() => navigate("/signup")}
       >
@@ -31,7 +32,8 @@ export function NavBar() {
       </Button>
       <Button
         size={"lg"}
-        colorScheme="green"
+        mr={"15px"}
+        colorScheme="yellow"
         onClick={() => navigate("/member/list")}
       >
         회원목록

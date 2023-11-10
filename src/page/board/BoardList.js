@@ -34,7 +34,7 @@ export function BoardList() {
       <br />
       <Box>
         <Table>
-          <Thead bgColor={"pink.200"}>
+          <Thead background={"ivory"} border={"solid pink 2px"}>
             <Tr>
               <Th>id</Th>
               <Th>title</Th>
@@ -42,9 +42,10 @@ export function BoardList() {
               <Th>at</Th>
             </Tr>
           </Thead>
-          <Tbody background={"pink"}>
+          <Tbody background={"pink.50"}>
             {boardList.map((board) => (
               <Tr
+                border={"solid pink 2px"}
                 _hover={{ cursor: "pointer" }}
                 key={board.id}
                 onClick={() => navigate("/board/" + board.id)}

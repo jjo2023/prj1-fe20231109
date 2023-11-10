@@ -24,20 +24,25 @@ export function MemberList() {
 
   return (
     <Box>
+      <br />
+      <br />
       <Table>
-        <Thead>
+        <Thead background={"ivory"} border={"solid pink 2px"}>
           <Tr>
             <Th>id</Th>
             <Th>pw</Th>
             <Th>email</Th>
+            <Th>가입일시</Th>
           </Tr>
         </Thead>
-        <Tbody>
+
+        <Tbody background={"pink.50"}>
           {list.map((member) => (
-            <Tr key={member.id}>
+            <Tr key={member.id} border={"solid pink 2px"}>
               <Td>{member.id}</Td>
               <Td>{member.password}</Td>
               <Td>{member.email}</Td>
+              <Td>{member.inserted}</Td>
             </Tr>
           ))}
         </Tbody>
