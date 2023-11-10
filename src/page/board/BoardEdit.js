@@ -45,9 +45,28 @@ export function BoardEdit() {
 
     axios
       .put("/api/board/edit", board)
-      .then(() => console.log("잘됨"))
-      .catch(() => console.log("잘안됨"))
-      .finally(() => console.log("끝"));
+      .then(() => {
+        toast({
+          description: board.id + "번 게시글이 수정되었습니다.",
+          status: "success",
+        });
+
+        navigate("/board/" + id);
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          toast({
+            description: "요청이 잘못되었습니다.",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: "수정 중에 문제가 발생하였습니다.",
+            status: "error",
+          });
+        }
+      })
+      .finally(() => onClose());
   }
 
   return (
@@ -89,11 +108,35 @@ export function BoardEdit() {
           }}
         />
       </FormControl>
-      <Button colorScheme="blue" onClick={handleSubmit}>
+      <Button colorScheme="blue" onClick={onOpen}>
         저장
       </Button>
       {/* navigate(-1) : 이전 경로로 이동 */}
       <Button onClick={() => navigate(-1)}>취소</Button>
+
+      {/* 수정 모달 만들기! */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>수정 확인❤️</ModalHeader>
+          <ModalCloseButton>✖️</ModalCloseButton>
+          <ModalBody>수정 하시겠습니까?😉</ModalBody>
+
+          <ModalFooter>
+            <Button
+              size={"sm"}
+              mr={"8px"}
+              onClick={handleSubmit}
+              background={"coral"}
+            >
+              예😆
+            </Button>
+            <Button size={"sm"} onClick={onClose}>
+              잠시만용❗
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }

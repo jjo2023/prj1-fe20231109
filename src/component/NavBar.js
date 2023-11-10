@@ -12,14 +12,22 @@ export function NavBar() {
         mr={"15px"}
         onClick={() => navigate("/")}
       >
-        home
+        메인
       </Button>
       <Button
         size={"lg"}
-        colorScheme="teal"
+        mr={"15px"}
+        colorScheme="facebook"
         onClick={() => navigate("/writer")}
       >
-        writer
+        글쓰기
+      </Button>
+      <Button
+        size={"lg"}
+        colorScheme="green"
+        onClick={() => navigate("/signup")}
+      >
+        회원가입
       </Button>
     </Flex>
   );
