@@ -29,6 +29,13 @@ export function NavBar() {
       >
         회원가입
       </Button>
+      <Button
+        size={"lg"}
+        colorScheme="green"
+        onClick={() => navigate("/member/list")}
+      >
+        회원목록
+      </Button>
     </Flex>
   );
 }
