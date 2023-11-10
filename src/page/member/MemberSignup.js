@@ -6,9 +6,11 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function MemberSignup() {
   const [id, setId] = useState("");
@@ -16,8 +18,15 @@ export function MemberSignup() {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [email, setEmail] = useState("");
   const [idAvailable, setIdAvailable] = useState(false);
+  const toast = useToast();
+  const navigate = useNavigate();
+  const [emailAvailable, setEmailAvailable] = useState(false);
 
   let submitAvailable = true;
+
+  if (!emailAvailable) {
+    submitAvailable = false;
+  }
 
   if (!idAvailable) {
     submitAvailable = false;
@@ -38,8 +47,25 @@ export function MemberSignup() {
         password,
         email,
       })
-      .then(() => console.log("good"))
-      .catch(() => console.log("bad"))
+      .then(() => {
+        toast({
+          description: "회원가입이 완료되었습니다",
+          status: "success",
+        });
+      })
+      .catch((error) => {
+        if (error.reponse.status === 400) {
+          toast({
+            description: "입력값을 확인해 주세요",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: "가입중 오류가 발생하였습니다",
+            status: "error",
+          });
+        }
+      })
       .finally(() => console.log("done"));
   }
 
@@ -51,10 +77,41 @@ export function MemberSignup() {
       .get("/api/member/check?" + searchParam.toString())
       .then(() => {
         setIdAvailable(false);
+        toast({
+          description: "이미 사용 중인 ID입니다.",
+          status: "warning",
+        });
       })
       .catch((error) => {
         if (error.response.status === 404) {
           setIdAvailable(true);
+          toast({
+            description: "사용 가능한 ID입니다.",
+            status: "success",
+          });
+        }
+      });
+  }
+
+  function handleEmailCheck() {
+    const params = new URLSearchParams();
+    params.set("email", email);
+
+    axios
+      .get("/api/member/check?" + params)
+      .then(() => {
+        toast({
+          description: "이미 사용 중 입니다",
+          status: "warning",
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          setEmailAvailable(true);
+          toast({
+            description: "사용가능한 email 입니다",
+            status: "success",
+          });
         }
       });
   }
@@ -97,13 +154,18 @@ export function MemberSignup() {
         <FormErrorMessage>암호가 다릅니다.</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!emailAvailable}>
         <FormLabel>email</FormLabel>
         <Input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmailAvailable(false);
+            setEmail(e.target.value);
+          }}
         />
+        <Button onClick={handleEmailCheck}>중복 체크</Button>
+        <FormErrorMessage>중복 체크를 해주세요</FormErrorMessage>
       </FormControl>
 
       <Button
