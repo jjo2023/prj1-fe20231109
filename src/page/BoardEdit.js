@@ -12,6 +12,8 @@ import {
   ModalHeader,
   ModalOverlay,
   Spinner,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -20,11 +22,11 @@ import axios from "axios";
 
 export function BoardEdit() {
   const [board, updateBoard] = useImmer(null);
-
+  const toast = useToast();
   const navigate = useNavigate();
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   // /edit/:id
-
   const { id } = useParams();
 
   useEffect(() => {
