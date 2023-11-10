@@ -76,7 +76,13 @@ export function BoardView() {
         <Input background={"pink.50"} value={board.inserted} readOnly />
       </FormControl>
 
-      <Button size={"sm"} mt={"30px"} mr={"8px"} colorScheme="blue">
+      <Button
+        size={"sm"}
+        mt={"30px"}
+        mr={"8px"}
+        colorScheme="blue"
+        onClick={() => navigate("/edit/" + id)}
+      >
         수정
       </Button>
       <Button size={"sm"} mt={"30px"} colorScheme="red" onClick={onOpen}>
