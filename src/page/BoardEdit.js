@@ -1,6 +1,13 @@
-import { Box, FormControl, FormLabel, Input, Spinner } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Spinner,
+} from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useImmer } from "use-immer";
 import axios from "axios";
 
@@ -10,6 +17,8 @@ export function BoardEdit() {
   // /edit/:id
 
   const { id } = useParams();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -21,18 +30,6 @@ export function BoardEdit() {
     return <Spinner />;
   }
 
-  function handleTitleChange(e) {
-    updateBoard((dratf) => {
-      dratf.title = e.target.value;
-    });
-  }
-
-  function handleContentChange(e) {
-    updateBoard((dratf) => {
-      dratf.content = e.target.value;
-    });
-  }
-
   return (
     <Box>
       <h1>{id}번 글 수정</h1>
@@ -41,7 +38,11 @@ export function BoardEdit() {
         <Input
           background={"pink.50"}
           value={board.title}
-          onChange={handleTitleChange}
+          onChange={(e) => {
+            updateBoard((dratf) => {
+              dratf.title = e.target.value;
+            });
+          }}
         />
       </FormControl>
       <FormControl>
@@ -49,13 +50,28 @@ export function BoardEdit() {
         <Input
           background={"pink.50"}
           value={board.content}
-          onChange={handleContentChange}
+          onChange={(e) => {
+            updateBoard((dratf) => {
+              dratf.content = e.target.value;
+            });
+          }}
         />
       </FormControl>
       <FormControl>
         <FormLabel>작성자</FormLabel>
-        <Input background={"pink.50"} value={board.writer} />
+        <Input
+          background={"pink.50"}
+          value={board.writer}
+          onChange={(e) => {
+            updateBoard((draft) => {
+              draft.writer = e.target.value;
+            });
+          }}
+        />
       </FormControl>
+      <Button colorScheme="blue">저장</Button>
+      {/* navigate(-1) : 이전 경로로 이동 */}
+      <Button onClick={() => navigate(-1)}>취소</Button>
     </Box>
   );
 }
