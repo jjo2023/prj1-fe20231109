@@ -4,6 +4,13 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spinner,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
@@ -14,11 +21,11 @@ import axios from "axios";
 export function BoardEdit() {
   const [board, updateBoard] = useImmer(null);
 
+  const navigate = useNavigate();
+
   // /edit/:id
 
   const { id } = useParams();
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -28,6 +35,17 @@ export function BoardEdit() {
 
   if (board === null) {
     return <Spinner />;
+  }
+
+  function handleSubmit() {
+    // 저장 버튼 클릭시
+    // PUT /api/board/edit
+
+    axios
+      .put("/api/board/edit", board)
+      .then(() => console.log("잘됨"))
+      .catch(() => console.log("잘안됨"))
+      .finally(() => console.log("끝"));
   }
 
   return (
@@ -69,7 +87,9 @@ export function BoardEdit() {
           }}
         />
       </FormControl>
-      <Button colorScheme="blue">저장</Button>
+      <Button colorScheme="blue" onClick={handleSubmit}>
+        저장
+      </Button>
       {/* navigate(-1) : 이전 경로로 이동 */}
       <Button onClick={() => navigate(-1)}>취소</Button>
     </Box>
