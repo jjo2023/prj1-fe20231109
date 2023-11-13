@@ -1,5 +1,5 @@
-import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Box,
@@ -8,7 +8,15 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spinner,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 
@@ -21,6 +29,9 @@ export function MemberEdit() {
 
   const toast = useToast();
   const [params] = useSearchParams();
+  const navigate = useNavigate();
+
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   useEffect(() => {
     axios.get("/api/member?" + params.toString()).then((response) => {
@@ -82,7 +93,28 @@ export function MemberEdit() {
 
   function hondleSubmit() {
     // put /api/member/edit{id, password, email}
-    axios.put("/api/member/edit", { id: member.id, password, email });
+    axios
+      .put("/api/member/edit", { id: member.id, password, email })
+      .then(() => {
+        toast({
+          description: "회원정보가 수정되었습니다",
+          status: "success",
+        });
+        navigate("/member?" + params.toString());
+      })
+      .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          toast({
+            description: "수정 권한이 없습니다",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: "수정 중 문제 발생",
+            status: "error",
+          });
+        }
+      });
   }
 
   return (
@@ -129,10 +161,29 @@ export function MemberEdit() {
       <Button
         isDisabled={!emailChecked || !passwordChecked}
         colorScheme="blue"
-        onClick={hondleSubmit}
+        onClick={onOpen}
       >
         수정
       </Button>
+
+      {/* 수정 모달 */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>수정 확인</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>수정 하시겠습니까?</ModalBody>
+
+          <ModalFooter>
+            <Button size={"sm"} mr={"8px"} onClick={onClose}>
+              닫기🩷
+            </Button>
+            <Button size={"sm"} onClick={hondleSubmit} colorScheme="red">
+              수정😐
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
