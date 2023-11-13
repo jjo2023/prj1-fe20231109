@@ -10,9 +10,12 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function MemberList() {
   const [list, setList] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get("/api/member/list").then((response) => setList(response.data));
@@ -20,6 +23,12 @@ export function MemberList() {
 
   if (list == null) {
     return <Spinner />;
+  }
+
+  function handleTableRowClick(id) {
+    const params = new URLSearchParams();
+    params.set("id", id);
+    navigate("/member?" + params.toString());
   }
 
   return (
@@ -38,7 +47,11 @@ export function MemberList() {
 
         <Tbody background={"pink.50"}>
           {list.map((member) => (
-            <Tr key={member.id} border={"solid pink 2px"}>
+            <Tr
+              onClick={() => handleTableRowClick(member.id)}
+              key={member.id}
+              border={"solid pink 2px"}
+            >
               <Td>{member.id}</Td>
               <Td>{member.password}</Td>
               <Td>{member.email}</Td>
