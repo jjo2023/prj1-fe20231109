@@ -48,6 +48,7 @@ export function MemberList() {
         <Tbody background={"pink.50"}>
           {list.map((member) => (
             <Tr
+              _hover={{ cursor: "pointer" }}
               onClick={() => handleTableRowClick(member.id)}
               key={member.id}
               border={"solid pink 2px"}
