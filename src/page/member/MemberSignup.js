@@ -14,13 +14,19 @@ import { useNavigate } from "react-router-dom";
 
 export function MemberSignup() {
   const [id, setId] = useState("");
+  const [idAvailable, setIdAvailable] = useState(false);
+
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
+
   const [email, setEmail] = useState("");
-  const [idAvailable, setIdAvailable] = useState(false);
+  const [emailAvailable, setEmailAvailable] = useState(false);
+
+  const [nickName, setNickName] = useState("");
+  const [nickNameAvailable, setNickNameAvailable] = useState(false);
+
   const toast = useToast();
   const navigate = useNavigate();
-  const [emailAvailable, setEmailAvailable] = useState(false);
 
   let submitAvailable = true;
 
@@ -40,18 +46,24 @@ export function MemberSignup() {
     submitAvailable = false;
   }
 
+  if (!nickNameAvailable) {
+    submitAvailable = false;
+  }
+
   function handleSubmit() {
     axios
       .post("/api/member/signup", {
         id,
         password,
         email,
+        nickName,
       })
       .then(() => {
         toast({
           description: "회원가입이 완료되었습니다",
           status: "success",
         });
+        navigate("/");
       })
       .catch((error) => {
         if (error.reponse.status === 400) {
@@ -116,6 +128,30 @@ export function MemberSignup() {
       });
   }
 
+  function handleNickNameCheck() {
+    const params = new URLSearchParams();
+    params.set("nickName", nickName);
+
+    axios
+      .get("/api/member/check?" + params)
+      .then(() => {
+        setNickNameAvailable(false);
+        toast({
+          description: "이미 사용 중인 닉네임 입니다",
+          status: "warning",
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          setNickNameAvailable(true);
+          toast({
+            description: "사용가능한 닉네임 입니다",
+            status: "success",
+          });
+        }
+      });
+  }
+
   return (
     <Box>
       <br />
@@ -154,6 +190,22 @@ export function MemberSignup() {
           onChange={(e) => setPasswordCheck(e.target.value)}
         />
         <FormErrorMessage>암호가 다릅니다.</FormErrorMessage>
+      </FormControl>
+
+      <FormControl isInvalid={!nickNameAvailable}>
+        <FormLabel>nick name</FormLabel>
+        <Flex>
+          <Input
+            type="text"
+            value={nickName}
+            onChange={(e) => {
+              setNickName(e.target.value);
+              setNickNameAvailable(false);
+            }}
+          />
+          <Button onClick={handleNickNameCheck}>중복확인</Button>
+        </Flex>
+        <FormErrorMessage>중복된 닉네임 입니다</FormErrorMessage>
       </FormControl>
 
       <FormControl isInvalid={!emailAvailable}>
