@@ -1,12 +1,25 @@
-import { Button, Flex } from "@chakra-ui/react";
+import { Button, Flex, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useContext } from "react";
+import { LoginContext } from "../App";
 
 export function NavBar() {
+  const { fetchLogin, login, isAuthenticated } = useContext(LoginContext);
+  const toast = useToast();
   const navigate = useNavigate();
 
   function handleLogout() {
-    axios.post("/api/member/logout").then(() => console.log("로그아웃 성공"));
+    axios
+      .post("/api/member/logout")
+      .then(() => {
+        toast({
+          description: "로그아웃 되었습니다",
+          status: "info",
+        });
+        navigate("/");
+      })
+      .finally(() => fetchLogin());
   }
 
   return (
@@ -19,46 +32,58 @@ export function NavBar() {
       >
         메인
       </Button>
-      <Button
-        size={"lg"}
-        mr={"15px"}
-        colorScheme="facebook"
-        onClick={() => navigate("/writer")}
-      >
-        글쓰기
-      </Button>
-      <Button
-        size={"lg"}
-        mr={"15px"}
-        colorScheme="green"
-        onClick={() => navigate("/signup")}
-      >
-        회원가입
-      </Button>
-      <Button
-        size={"lg"}
-        mr={"15px"}
-        colorScheme="yellow"
-        onClick={() => navigate("/member/list")}
-      >
-        회원목록
-      </Button>
-      <Button
-        size={"lg"}
-        mr={"15px"}
-        background={"wheat"}
-        onClick={() => navigate("/login")}
-      >
-        로그인
-      </Button>
-      <Button
-        size={"lg"}
-        mr={"15px"}
-        background={"cornsilk"}
-        onClick={handleLogout}
-      >
-        로그아웃
-      </Button>
+
+      {isAuthenticated() && (
+        <Button
+          size={"lg"}
+          mr={"15px"}
+          colorScheme="facebook"
+          onClick={() => navigate("/writer")}
+        >
+          글쓰기
+        </Button>
+      )}
+
+      {isAuthenticated() || (
+        <Button
+          size={"lg"}
+          mr={"15px"}
+          colorScheme="green"
+          onClick={() => navigate("/signup")}
+        >
+          회원가입
+        </Button>
+      )}
+      {isAuthenticated() && (
+        <Button
+          size={"lg"}
+          mr={"15px"}
+          colorScheme="yellow"
+          onClick={() => navigate("/member/list")}
+        >
+          회원목록
+        </Button>
+      )}
+      {isAuthenticated() || (
+        <Button
+          size={"lg"}
+          mr={"15px"}
+          background={"wheat"}
+          onClick={() => navigate("/login")}
+        >
+          로그인
+        </Button>
+      )}
+      {isAuthenticated() && (
+        <Button
+          size={"lg"}
+          mr={"15px"}
+          background={"cornsilk"}
+          onClick={handleLogout}
+        >
+          로그아웃
+        </Button>
+      )}
     </Flex>
   );
 }
