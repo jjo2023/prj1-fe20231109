@@ -6,7 +6,6 @@ import {
   CardHeader,
   Flex,
   Heading,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -21,8 +20,8 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import axios from "axios";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { LoginContext } from "./LoginProvider";
 
@@ -49,22 +48,18 @@ function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
   return (
     <Card>
       <CardHeader>
-        <Heading size={"md"}>댓글 리스트</Heading>
+        <Heading size="md">댓글 리스트</Heading>
       </CardHeader>
       <CardBody>
         <Stack divider={<StackDivider />} spacing="4">
-          {/* TODO : 새로운 줄 출력 (<Text sx={{ whiteSpace: "pre-wrap" }} 이거 넣음.. */}
-
-          {/* TODO : 댓글 작성 후 re render */}
           {commentList.map((comment) => (
             <Box key={comment.id}>
-              <Flex justifyContent={"space-between"}>
-                <Heading size={"xs"}>{comment.memberId}</Heading>
-                <Text fontSize={"xs"}>{comment.inserted}</Text>
+              <Flex justifyContent="space-between">
+                <Heading size="xs">{comment.memberId}</Heading>
+                <Text fontSize="xs">{comment.inserted}</Text>
               </Flex>
-
-              <Flex justifyContent={"space-between"} alignItems={"center"}>
-                <Text sx={{ whiteSpace: "pre-wrap" }} pt={"2"} fontSize={"sm"}>
+              <Flex justifyContent="space-between" alignItems="center">
+                <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
                   {comment.comment}
                 </Text>
 
@@ -72,8 +67,8 @@ function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
                   <Button
                     isDisabled={isSubmitting}
                     onClick={() => onDeleteModalOpen(comment.id)}
+                    size="xs"
                     colorScheme="red"
-                    size={"xs"}
                   >
                     <DeleteIcon />
                   </Button>
@@ -93,18 +88,19 @@ export function CommentContainer({ boardId }) {
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const { isAuthenticated } = useContext(LoginContext);
-
-  const toast = useToast();
-
   // const [id, setId] = useState(0);
   // useRef : 컴포넌트에서 임시로 값을 저장하는 용도로 사용
   const commentIdRef = useRef(0);
+
+  const { isAuthenticated } = useContext(LoginContext);
+
+  const toast = useToast();
 
   useEffect(() => {
     if (!isSubmitting) {
       const params = new URLSearchParams();
       params.set("id", boardId);
+
       axios
         .get("/api/comment/list?" + params)
         .then((response) => setCommentList(response.data));
@@ -118,34 +114,38 @@ export function CommentContainer({ boardId }) {
       .post("/api/comment/add", comment)
       .then(() => {
         toast({
-          description: "댓글이 등록되었습니다",
+          description: "댓글이 등록되었습니다.",
           status: "success",
         });
       })
-      .catch((erroe) => {
+      .catch((error) => {
         toast({
-          description: "등록 중 오류가 발생하였습니다",
+          description: "댓글 등록 중 문제가 발생하였습니다.",
           status: "error",
         });
       })
       .finally(() => setIsSubmitting(false));
   }
-  function handleDelete(id) {
-    // TODO : 모달, then, catch, finally
 
+  function handleDelete() {
     setIsSubmitting(true);
     axios
       .delete("/api/comment/" + commentIdRef.current)
-      .then(() => console.log("good"))
+      .then(() => {
+        toast({
+          description: "댓글이 삭제되었습니다.",
+          status: "success",
+        });
+      })
       .catch((error) => {
         if (error.response.status === 401 || error.response.status === 403) {
           toast({
-            description: "권한이 없습니다",
+            description: "권한이 없습니다.",
             status: "warning",
           });
         } else {
           toast({
-            description: "댓글 삭제 중 문제가 발생했습니다",
+            description: "댓글 삭제 중 문제가 발생했습니다.",
             status: "error",
           });
         }
@@ -157,13 +157,12 @@ export function CommentContainer({ boardId }) {
   }
 
   function handleDeleteModalOpen(id) {
-    // id를 어딘가 저장
+    // id 를 어딘가 저장
     // setId(id);
     commentIdRef.current = id;
     // 모달 열기
     onOpen();
   }
-
   return (
     <Box>
       {isAuthenticated() && (
