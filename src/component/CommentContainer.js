@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 function CommentForm({ boardId, isSubmitting, onSubmit }) {
   const [comment, setComment] = useState("");
@@ -32,7 +33,7 @@ function CommentForm({ boardId, isSubmitting, onSubmit }) {
   );
 }
 
-function CommentList({ commentList }) {
+function CommentList({ commentList, onDelete, isSubmitting }) {
   return (
     <Card>
       <CardHeader>
@@ -49,9 +50,21 @@ function CommentList({ commentList }) {
                 <Heading size={"xs"}>{comment.memberId}</Heading>
                 <Text fontSize={"xs"}>{comment.inserted}</Text>
               </Flex>
-              <Text sx={{ whiteSpace: "pre-wrap" }} pt={"2"} fontSize={"sm"}>
-                {comment.comment}
-              </Text>
+
+              <Flex justifyContent={"space-between"} alignItems={"center"}>
+                <Text sx={{ whiteSpace: "pre-wrap" }} pt={"2"} fontSize={"sm"}>
+                  {comment.comment}
+                </Text>
+
+                <Button
+                  isDisabled={isSubmitting}
+                  onClick={() => onDelete(comment.id)}
+                  colorScheme="red"
+                  size={"xs"}
+                >
+                  <DeleteIcon />
+                </Button>
+              </Flex>
             </Box>
           ))}
         </Stack>
@@ -81,6 +94,12 @@ export function CommentContainer({ boardId }) {
       .post("/api/comment/add", comment)
       .finally(() => setIsSubmitting(false));
   }
+  function handleDelete(id) {
+    // TODO : then, catch, finally
+
+    setIsSubmitting(true);
+    axios.delete("/api/comment/" + id).finally(() => setIsSubmitting(false));
+  }
   return (
     <Box>
       <CommentForm
@@ -88,7 +107,12 @@ export function CommentContainer({ boardId }) {
         isSubmitting={isSubmitting}
         onSubmit={handleSubmit}
       />
-      <CommentList boardId={boardId} commentList={commentList} />
+      <CommentList
+        boardId={boardId}
+        isSubmitting={isSubmitting}
+        commentList={commentList}
+        onDelete={handleDelete}
+      />
     </Box>
   );
 }
