@@ -2,13 +2,19 @@ import { Button, Flex, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
-import { LoginContext } from "../App";
+import { LoginContext } from "./LoginProvider";
 
 export function NavBar() {
-  const { fetchLogin, login, isAuthenticated } = useContext(LoginContext);
+  const { fetchLogin, login, isAuthenticated, isAdmin } =
+    useContext(LoginContext);
   const toast = useToast();
   const navigate = useNavigate();
 
+  const urlParams = new URLSearchParams();
+
+  if (login !== "") {
+    urlParams.set("id", login.id);
+  }
   function handleLogout() {
     axios
       .post("/api/member/logout")
@@ -54,7 +60,7 @@ export function NavBar() {
           회원가입
         </Button>
       )}
-      {isAuthenticated() && (
+      {isAdmin() && (
         <Button
           size={"lg"}
           mr={"15px"}
@@ -64,6 +70,13 @@ export function NavBar() {
           회원목록
         </Button>
       )}
+
+      {isAuthenticated() && (
+        <Button onClick={() => navigate("/member?" + urlParams.toString())}>
+          회원정보
+        </Button>
+      )}
+
       {isAuthenticated() || (
         <Button
           size={"lg"}

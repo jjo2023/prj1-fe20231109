@@ -18,7 +18,8 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { LoginContext } from "../../App";
+import { LoginContext } from "../../component/LoginProvider";
+import { CommentContainer } from "../../component/CommentContainer";
 
 export function BoardView() {
   const [board, setBoard] = useState(null);
@@ -29,7 +30,7 @@ export function BoardView() {
 
   const { id } = useParams();
 
-  const { hasAccess } = useContext(LoginContext);
+  const { hasAccess, isAdmin } = useContext(LoginContext);
 
   useEffect(() => {
     axios
@@ -79,7 +80,7 @@ export function BoardView() {
         <Input background={"pink.50"} value={board.inserted} readOnly />
       </FormControl>
 
-      {hasAccess(board.writer) && (
+      {(hasAccess(board.writer) || isAdmin()) && (
         <Box>
           <Button
             size={"sm"}
@@ -114,6 +115,7 @@ export function BoardView() {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <CommentContainer boardId={id} />
     </Box>
   );
 }
