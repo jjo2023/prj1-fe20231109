@@ -3,6 +3,17 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext, useEffect } from "react";
 import { LoginContext } from "./LoginProvider";
+import {
+  faEnvelope,
+  faGear,
+  faHouse,
+  faPenNib,
+  faRightFromBracket,
+  faRightToBracket,
+  faUserPlus,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function NavBar() {
   const { fetchLogin, login, isAuthenticated, isAdmin } =
@@ -21,6 +32,7 @@ export function NavBar() {
   if (login !== "") {
     urlParams.set("id", login.id);
   }
+
   function handleLogout() {
     axios.post("/api/member/logout").then(() => {
       toast({
@@ -35,11 +47,12 @@ export function NavBar() {
     <Flex>
       <Button
         size={"lg"}
-        colorScheme="orange"
+        background={"plum"}
         mr={"15px"}
         onClick={() => navigate("/")}
       >
-        메인
+        <FontAwesomeIcon icon={faHouse} />
+        　메인
       </Button>
 
       {isAuthenticated() && (
@@ -49,7 +62,8 @@ export function NavBar() {
           colorScheme="facebook"
           onClick={() => navigate("/writer")}
         >
-          글쓰기
+          <FontAwesomeIcon icon={faPenNib} />
+          　글쓰기
         </Button>
       )}
 
@@ -60,7 +74,8 @@ export function NavBar() {
           colorScheme="green"
           onClick={() => navigate("/signup")}
         >
-          회원가입
+          <FontAwesomeIcon icon={faUserPlus} />
+          　회원가입
         </Button>
       )}
       {isAdmin() && (
@@ -70,13 +85,20 @@ export function NavBar() {
           colorScheme="yellow"
           onClick={() => navigate("/member/list")}
         >
-          회원목록
+          <FontAwesomeIcon icon={faUsers} />
+          　회원목록
         </Button>
       )}
 
       {isAuthenticated() && (
-        <Button onClick={() => navigate("/member?" + urlParams.toString())}>
-          회원정보
+        <Button
+          size={"lg"}
+          mr={"15px"}
+          background={"springgreen"}
+          onClick={() => navigate("/member?" + urlParams.toString())}
+        >
+          <FontAwesomeIcon icon={faGear} />
+          　회원정보
         </Button>
       )}
 
@@ -87,7 +109,8 @@ export function NavBar() {
           background={"wheat"}
           onClick={() => navigate("/login")}
         >
-          로그인
+          <FontAwesomeIcon icon={faRightToBracket} />
+          　로그인
         </Button>
       )}
       {isAuthenticated() && (
@@ -97,7 +120,8 @@ export function NavBar() {
           background={"cornsilk"}
           onClick={handleLogout}
         >
-          로그아웃
+          <FontAwesomeIcon icon={faRightFromBracket} />
+          　로그아웃
         </Button>
       )}
     </Flex>
