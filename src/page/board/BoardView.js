@@ -17,16 +17,41 @@ import {
   ModalHeader,
   ModalOverlay,
   Spinner,
+  Text,
+  Tooltip,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { LoginContext } from "../../component/LoginProvider";
 import { CommentContainer } from "../../component/CommentContainer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
+import * as PropTypes from "prop-types";
+
+function LikeContainer({ like, onClick }) {
+  const { isAuthenticated } = useContext(LoginContext);
+
+  if (like === null) {
+    return <Spinner />;
+  }
+
+  return (
+    <Flex gap={3}>
+      <Tooltip isDisabled={isAuthenticated()} hasArrow label={"로그인 하세요"}>
+        <Button variant="ghost" size="xl" onClick={onClick}>
+          {like.like && <FontAwesomeIcon icon={fullHeart} size="xl" />}
+          {like.like || <FontAwesomeIcon icon={emptyHeart} size="xl" />}
+        </Button>
+      </Tooltip>
+      <Heading size={"lg"}>{like.countLike}</Heading>
+    </Flex>
+  );
+}
 
 export function BoardView() {
   const [board, setBoard] = useState(null);
+  const [like, setLike] = useState(null);
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -40,6 +65,12 @@ export function BoardView() {
     axios
       .get("/api/board/id/" + id)
       .then((response) => setBoard(response.data));
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("/api/like/board/" + id)
+      .then((response) => setLike(response.data));
   }, []);
 
   if (board === null) {
@@ -65,7 +96,7 @@ export function BoardView() {
   function handleLike() {
     axios
       .post("/api/like", { boardId: board.id })
-      .then(() => console.log("good"))
+      .then((response) => setLike(response.data))
       .catch(() => console.log("bad"))
       .finally(() => console.log("done"));
   }
@@ -73,14 +104,10 @@ export function BoardView() {
   return (
     <Box>
       <br />
-
-      <Flex>
-        <Heading size="xl">{board.id}</Heading>
-        <Button variant="ghost" size="xl" onClick={handleLike}>
-          <FontAwesomeIcon icon={faHeart} />
-        </Button>
+      <Flex justifyContent={"space-between"}>
+        <Heading size="xl">{board.id}번 글보기</Heading>
+        <LikeContainer like={like} onClick={handleLike} />
       </Flex>
-
       <br />
 
       <FormControl>
