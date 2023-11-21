@@ -20,6 +20,7 @@ import {
   faAngleLeft,
   faAngleRight,
   faHeart,
+  faImages,
 } from "@fortawesome/free-solid-svg-icons";
 import * as PropTypes from "prop-types";
 
@@ -151,9 +152,15 @@ export function BoardList() {
                       {board.countComment}
                     </Badge>
                   )}
+                  {board.countFile > 0 && (
+                    <Badge>
+                      <FontAwesomeIcon icon={faImages} />
+                      {board.countFile}
+                    </Badge>
+                  )}
                 </Td>
                 <Td>{board.nickName}</Td>
-                <Td>{board.inserted}</Td>
+                {/*<Td>{board.inserted}</Td>*/}
                 <Td>{board.ago}</Td>
               </Tr>
             ))}
