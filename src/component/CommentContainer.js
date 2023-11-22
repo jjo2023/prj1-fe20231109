@@ -4,6 +4,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Center,
   Flex,
   Heading,
   Modal,
@@ -13,6 +14,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spacer,
   Stack,
   StackDivider,
   Text,
@@ -24,6 +26,12 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { DeleteIcon, EditIcon, NotAllowedIcon } from "@chakra-ui/icons";
 import { LoginContext } from "./LoginProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faComment,
+  faComments,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
 
 function CommentForm({ boardId, isSubmitting, onSubmit }) {
   const [comment, setComment] = useState("");
@@ -33,11 +41,24 @@ function CommentForm({ boardId, isSubmitting, onSubmit }) {
   }
 
   return (
-    <Box>
-      <Textarea value={comment} onChange={(e) => setComment(e.target.value)} />
-      <Button isDisabled={isSubmitting} onClick={handleSubmit}>
-        쓰기
-      </Button>
+    <Box mb={10}>
+      <Flex>
+        <Textarea
+          background={"linkedin.50"}
+          placeholder="댓글을 작성해 달라냥😺"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
+        <Center>
+          <Button
+            background={"whatsapp.50"}
+            isDisabled={isSubmitting}
+            onClick={handleSubmit}
+          >
+            <FontAwesomeIcon icon={faPenToSquare} />
+          </Button>
+        </Center>
+      </Flex>
     </Box>
   );
 }
@@ -265,6 +286,13 @@ export function CommentContainer({ boardId }) {
   }
   return (
     <Box>
+      <Center>
+        <Box my={"25px"}>
+          <Heading size={"md"}>
+            <FontAwesomeIcon icon={faComments} /> COMMENTS
+          </Heading>
+        </Box>
+      </Center>
       {isAuthenticated() && (
         <CommentForm
           boardId={boardId}

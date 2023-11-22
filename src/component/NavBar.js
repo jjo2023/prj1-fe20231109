@@ -1,4 +1,4 @@
-import { Button, Flex, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, Spacer, useToast } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext, useEffect } from "react";
@@ -44,13 +44,8 @@ export function NavBar() {
   }
 
   return (
-    <Flex>
-      <Button
-        size={"lg"}
-        background={"plum"}
-        mr={"15px"}
-        onClick={() => navigate("/")}
-      >
+    <Flex mb={5}>
+      <Button size={"lg"} background={"plum"} onClick={() => navigate("/")}>
         <FontAwesomeIcon icon={faHouse} />
         　메인
       </Button>
@@ -58,7 +53,6 @@ export function NavBar() {
       {isAuthenticated() && (
         <Button
           size={"lg"}
-          mr={"15px"}
           colorScheme="facebook"
           onClick={() => navigate("/writer")}
         >
@@ -66,11 +60,11 @@ export function NavBar() {
           　글쓰기
         </Button>
       )}
+      <Spacer />
 
       {isAuthenticated() || (
         <Button
           size={"lg"}
-          mr={"15px"}
           colorScheme="green"
           onClick={() => navigate("/signup")}
         >
@@ -81,7 +75,6 @@ export function NavBar() {
       {isAdmin() && (
         <Button
           size={"lg"}
-          mr={"15px"}
           colorScheme="yellow"
           onClick={() => navigate("/member/list")}
         >
@@ -93,19 +86,17 @@ export function NavBar() {
       {isAuthenticated() && (
         <Button
           size={"lg"}
-          mr={"15px"}
           background={"springgreen"}
           onClick={() => navigate("/member?" + urlParams.toString())}
         >
           <FontAwesomeIcon icon={faGear} />
-          　회원정보
+          {login.nickName}님
         </Button>
       )}
 
       {isAuthenticated() || (
         <Button
           size={"lg"}
-          mr={"15px"}
           background={"wheat"}
           onClick={() => navigate("/login")}
         >
@@ -114,12 +105,7 @@ export function NavBar() {
         </Button>
       )}
       {isAuthenticated() && (
-        <Button
-          size={"lg"}
-          mr={"15px"}
-          background={"cornsilk"}
-          onClick={handleLogout}
-        >
+        <Button size={"lg"} background={"cornsilk"} onClick={handleLogout}>
           <FontAwesomeIcon icon={faRightFromBracket} />
           　로그아웃
         </Button>

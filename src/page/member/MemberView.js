@@ -3,8 +3,14 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Center,
   FormControl,
   FormLabel,
+  Heading,
   Input,
   Modal,
   ModalBody,
@@ -62,7 +68,7 @@ export function MemberView() {
         });
         navigate("/");
 
-        //TODO : 로그아웃 기능 추가하기
+        // TODO : 로그아웃 기능 추가하기
       })
       .catch((error) => {
         if (error.response.status === 401 || error.response.status === 403) {
@@ -80,34 +86,41 @@ export function MemberView() {
   }
 
   return (
-    <Box>
-      <br />
-      <h1>{member.id}님 정보</h1>
-      <br />
-      <FormControl>
-        <FormLabel>password</FormLabel>
-        <Input type="text" value={member.password} readOnly />
-      </FormControl>
+    <Center>
+      <Card>
+        <CardHeader>
+          <Heading>{member.id}님 정보</Heading>
+        </CardHeader>
 
-      <FormControl>
-        <FormLabel>닉네임</FormLabel>
-        <Input value={member.nickName} readOnly />
-      </FormControl>
+        <CardBody>
+          <FormControl>
+            <FormLabel>password</FormLabel>
+            <Input type="text" value={member.password} readOnly />
+          </FormControl>
 
-      <FormControl>
-        <FormLabel>email</FormLabel>
-        <Input value={member.email} readOnly />
-      </FormControl>
+          <FormControl>
+            <FormLabel>닉네임</FormLabel>
+            <Input value={member.nickName} readOnly />
+          </FormControl>
 
-      <Button
-        colorScheme="purple"
-        onClick={() => navigate("/member/edit?" + params.toString())}
-      >
-        수정
-      </Button>
-      <Button colorScheme="red" onClick={onOpen}>
-        탈퇴
-      </Button>
+          <FormControl>
+            <FormLabel>email</FormLabel>
+            <Input value={member.email} readOnly />
+          </FormControl>
+        </CardBody>
+
+        <CardFooter>
+          <Button
+            colorScheme="purple"
+            onClick={() => navigate("/member/edit?" + params.toString())}
+          >
+            수정
+          </Button>
+          <Button colorScheme="red" onClick={onOpen}>
+            탈퇴
+          </Button>
+        </CardFooter>
+      </Card>
 
       {/* 탈퇴 모달 */}
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -127,6 +140,6 @@ export function MemberView() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Box>
+    </Center>
   );
 }

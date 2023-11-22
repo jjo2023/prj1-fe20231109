@@ -2,7 +2,10 @@ import {
   Badge,
   Box,
   Button,
+  Flex,
+  Heading,
   Input,
+  Select,
   Spinner,
   Table,
   Tbody,
@@ -12,7 +15,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { all } from "axios";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ChatIcon } from "@chakra-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -78,22 +81,31 @@ function Pagination({ pageInfo }) {
 
 function SearchComponent() {
   const [keyword, setKeyword] = useState("");
-
+  const [category, setCategory] = useState("all");
   const navigate = useNavigate();
 
   function handleSearch() {
-    // /?k=keyword
+    // /?k=keyword&c=all
     const params = new URLSearchParams();
     params.set("k", keyword);
+    params.set("c", category);
 
     navigate("/?" + params);
   }
 
   return (
-    <Box>
+    <Flex>
+      <Select defaultValue="all" onChange={(e) => setCategory(e.target.value)}>
+        <option selected value="all">
+          전체
+        </option>
+        <option value="title">제목</option>
+        <option value="content">본문</option>
+      </Select>
+
       <Input value={keyword} onChange={(e) => setKeyword(e.target.value)} />
       <Button onClick={handleSearch}>검색</Button>
-    </Box>
+    </Flex>
   );
 }
 
@@ -118,8 +130,7 @@ export function BoardList() {
 
   return (
     <Box>
-      <br />
-      <h1>게시물 목록</h1>
+      <Heading>게시물 목록</Heading>
       <br />
       <Box>
         <Table>

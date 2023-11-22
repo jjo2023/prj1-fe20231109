@@ -81,6 +81,7 @@ export function BoardWrite(props) {
         <FormControl>
           <FormLabel>본문</FormLabel>
           <Textarea
+            h={"sm"}
             background={"pink.50"}
             value={content}
             onChange={(e) => setContent(e.target.value)}

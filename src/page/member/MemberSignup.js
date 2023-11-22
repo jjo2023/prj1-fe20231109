@@ -5,6 +5,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Heading,
   Input,
   useToast,
 } from "@chakra-ui/react";
@@ -154,9 +155,7 @@ export function MemberSignup() {
 
   return (
     <Box>
-      <br />
-      <h1>회원 가입</h1>
-      <br />
+      <Heading>회원 가입</Heading>
       <FormControl isInvalid={!idAvailable}>
         <FormLabel>id</FormLabel>
         <Flex>
@@ -218,7 +217,7 @@ export function MemberSignup() {
             setEmail(e.target.value);
           }}
         />
-        <Button onClick={handleEmailCheck}>중복 체크</Button>
+        <Button onClick={handleEmailCheck}>중복확인</Button>
         <FormErrorMessage>중복 체크를 해주세요</FormErrorMessage>
       </FormControl>
 

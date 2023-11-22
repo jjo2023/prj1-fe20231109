@@ -4,6 +4,8 @@ import axios from "axios";
 import {
   Box,
   Button,
+  Card,
+  Center,
   Flex,
   FormControl,
   FormLabel,
@@ -104,7 +106,6 @@ export function BoardView() {
 
   return (
     <Box>
-      <br />
       <Flex justifyContent={"space-between"}>
         <Heading size="xl">{board.id}번 글보기</Heading>
         <LikeContainer like={like} onClick={handleLike} />
