@@ -2,6 +2,7 @@ import {
   Badge,
   Box,
   Button,
+  Center,
   Flex,
   Heading,
   Input,
@@ -24,6 +25,7 @@ import {
   faAngleRight,
   faHeart,
   faImages,
+  faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import * as PropTypes from "prop-types";
 
@@ -50,32 +52,35 @@ function Pagination({ pageInfo }) {
   for (let i = pageInfo.startPageNumber; i <= pageInfo.endPageNumber; i++) {
     pageNumbers.push(i);
   }
+
   return (
-    <Box>
-      {pageInfo.prevPageNumber && (
-        <PageButton variant="ghost" pageNumber={pageInfo.prevPageNumber}>
-          <FontAwesomeIcon icon={faAngleLeft} />
-        </PageButton>
-      )}
+    <Center mt={5} mb={40}>
+      <Box>
+        {pageInfo.prevPageNumber && (
+          <PageButton variant="ghost" pageNumber={pageInfo.prevPageNumber}>
+            <FontAwesomeIcon icon={faAngleLeft} />
+          </PageButton>
+        )}
 
-      {pageNumbers.map((pageNumber) => (
-        <PageButton
-          key={pageNumber}
-          variant={
-            pageNumber === pageInfo.currentPageNumber ? "solid" : "ghost"
-          }
-          pageNumber={pageNumber}
-        >
-          {pageNumber}
-        </PageButton>
-      ))}
+        {pageNumbers.map((pageNumber) => (
+          <PageButton
+            key={pageNumber}
+            variant={
+              pageNumber === pageInfo.currentPageNumber ? "solid" : "ghost"
+            }
+            pageNumber={pageNumber}
+          >
+            {pageNumber}
+          </PageButton>
+        ))}
 
-      {pageInfo.nextPageNumber && (
-        <PageButton variant="ghost" pageNumber={pageInfo.nextPageNumber}>
-          <FontAwesomeIcon icon={faAngleRight} />
-        </PageButton>
-      )}
-    </Box>
+        {pageInfo.nextPageNumber && (
+          <PageButton variant="ghost" pageNumber={pageInfo.nextPageNumber}>
+            <FontAwesomeIcon icon={faAngleRight} />
+          </PageButton>
+        )}
+      </Box>
+    </Center>
   );
 }
 
@@ -94,18 +99,23 @@ function SearchComponent() {
   }
 
   return (
-    <Flex>
-      <Select defaultValue="all" onChange={(e) => setCategory(e.target.value)}>
-        <option selected value="all">
-          전체
-        </option>
-        <option value="title">제목</option>
-        <option value="content">본문</option>
-      </Select>
+    <Center mt={5}>
+      <Flex gap={1}>
+        <Select
+          defaultValue="all"
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="all">전체</option>
+          <option value="title">제목</option>
+          <option value="content">본문</option>
+        </Select>
 
-      <Input value={keyword} onChange={(e) => setKeyword(e.target.value)} />
-      <Button onClick={handleSearch}>검색</Button>
-    </Flex>
+        <Input value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+        <Button onClick={handleSearch}>
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+        </Button>
+      </Flex>
+    </Center>
   );
 }
 
@@ -130,25 +140,25 @@ export function BoardList() {
 
   return (
     <Box>
-      <Heading>게시물 목록</Heading>
+      <Heading size={"lg"}>게시물 목록</Heading>
       <br />
       <Box>
         <Table>
-          <Thead background={"ivory"} border={"solid pink 2px"}>
+          <Thead background={"palevioletred"}>
             <Tr>
-              <Th>id</Th>
-              <Th>
+              <Th w={"100px"}>id</Th>
+              <Th w={"70px"}>
                 <FontAwesomeIcon icon={faHeart} />
               </Th>
               <Th>title</Th>
-              <Th>by</Th>
-              <Th>at</Th>
+              <Th w={"150px"}>by</Th>
+              <Th w={"150px"}>at</Th>
             </Tr>
           </Thead>
-          <Tbody background={"pink.50"}>
+
+          <Tbody background={"gray.50"}>
             {boardList.map((board) => (
               <Tr
-                border={"solid pink 2px"}
                 _hover={{ cursor: "pointer" }}
                 key={board.id}
                 onClick={() => navigate("/board/" + board.id)}
@@ -158,13 +168,13 @@ export function BoardList() {
                 <Td>
                   {board.title}
                   {board.countComment > 0 && (
-                    <Badge>
+                    <Badge ml={2}>
                       <ChatIcon />
                       {board.countComment}
                     </Badge>
                   )}
                   {board.countFile > 0 && (
-                    <Badge>
+                    <Badge ml={2}>
                       <FontAwesomeIcon icon={faImages} />
                       {board.countFile}
                     </Badge>

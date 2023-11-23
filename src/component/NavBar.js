@@ -19,6 +19,7 @@ export function NavBar() {
   const { fetchLogin, login, isAuthenticated, isAdmin } =
     useContext(LoginContext);
   const toast = useToast();
+
   const navigate = useNavigate();
 
   const urlParams = new URLSearchParams();
@@ -45,17 +46,13 @@ export function NavBar() {
 
   return (
     <Flex mb={5}>
-      <Button size={"lg"} background={"plum"} onClick={() => navigate("/")}>
+      <Button background={"pink"} mr={"8px"} onClick={() => navigate("/")}>
         <FontAwesomeIcon icon={faHouse} />
         　메인
       </Button>
 
       {isAuthenticated() && (
-        <Button
-          size={"lg"}
-          colorScheme="facebook"
-          onClick={() => navigate("/writer")}
-        >
+        <Button background={"plum"} onClick={() => navigate("/writer")}>
           <FontAwesomeIcon icon={faPenNib} />
           　글쓰기
         </Button>
@@ -64,8 +61,8 @@ export function NavBar() {
 
       {isAuthenticated() || (
         <Button
-          size={"lg"}
-          colorScheme="green"
+          background={"hotpink"}
+          mr={"8px"}
           onClick={() => navigate("/signup")}
         >
           <FontAwesomeIcon icon={faUserPlus} />
@@ -74,8 +71,8 @@ export function NavBar() {
       )}
       {isAdmin() && (
         <Button
-          size={"lg"}
           colorScheme="yellow"
+          mr={"8px"}
           onClick={() => navigate("/member/list")}
         >
           <FontAwesomeIcon icon={faUsers} />
@@ -85,8 +82,8 @@ export function NavBar() {
 
       {isAuthenticated() && (
         <Button
-          size={"lg"}
-          background={"springgreen"}
+          background={"bisque"}
+          mr={"8px"}
           onClick={() => navigate("/member?" + urlParams.toString())}
         >
           <FontAwesomeIcon icon={faGear} />
@@ -95,17 +92,13 @@ export function NavBar() {
       )}
 
       {isAuthenticated() || (
-        <Button
-          size={"lg"}
-          background={"wheat"}
-          onClick={() => navigate("/login")}
-        >
+        <Button background={"coral"} onClick={() => navigate("/login")}>
           <FontAwesomeIcon icon={faRightToBracket} />
           　로그인
         </Button>
       )}
       {isAuthenticated() && (
-        <Button size={"lg"} background={"cornsilk"} onClick={handleLogout}>
+        <Button background={"cornsilk"} onClick={handleLogout}>
           <FontAwesomeIcon icon={faRightFromBracket} />
           　로그아웃
         </Button>

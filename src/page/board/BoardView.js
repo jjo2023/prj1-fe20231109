@@ -21,6 +21,7 @@ import {
   ModalOverlay,
   Spinner,
   Text,
+  Textarea,
   Tooltip,
   useDisclosure,
   useToast,
@@ -107,32 +108,33 @@ export function BoardView() {
   return (
     <Box>
       <Flex justifyContent={"space-between"}>
-        <Heading size="xl">{board.id}번 글보기</Heading>
+        <Heading size="lg">{board.id}번 글보기</Heading>
         <LikeContainer like={like} onClick={handleLike} />
       </Flex>
       <br />
 
-      <FormControl>
+      <FormControl mb={5}>
         <FormLabel>제목</FormLabel>
         <Input background={"pink.50"} value={board.title} readOnly />
       </FormControl>
-      <FormControl>
+
+      <FormControl mb={5}>
         <FormLabel>본문</FormLabel>
-        <Input background={"pink.50"} value={board.content} readOnly />
+        <Textarea value={board.content} background={"pink.50"} readOnly />
       </FormControl>
 
       {/* 이미지 출력 */}
       {board.files.map((file) => (
-        <Box key={file.id} my="5px" border="3px solid black">
-          <Image width="100%" src={file.url} alt={file.name} />
+        <Box key={file.id} my="5px">
+          <Image width="50%" src={file.url} alt={file.name} />
         </Box>
       ))}
 
-      <FormControl>
+      <FormControl mb={5}>
         <FormLabel>작성자</FormLabel>
         <Input background={"pink.50"} value={board.nickName} readOnly />
       </FormControl>
-      <FormControl>
+      <FormControl mb={5}>
         <FormLabel>작성일시</FormLabel>
         <Input background={"pink.50"} value={board.inserted} readOnly />
       </FormControl>
